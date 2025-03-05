@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargo Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="server.js"></script>
+    <script src="seed.js"></script>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <!-- Add Tailwind CSS link if it's not already added -->
+        <script src="https://cdn.tailwindcss.com"></script>
+      </head>
+      
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Sidebar -->
+    <div class="flex">
+        <div class="w-64 h-screen bg-gray-800 text-white">
+            <div class="flex items-center justify-center p-6">
+                <h1 class="text-2xl font-bold">Cargo Management</h1>
+            </div>
+            <nav class="px-4 py-6">
+                <ul>
+                    <li>
+                        <a href="javascript:void(0);" class="block py-2 px-4 hover:bg-gray-600" data-section="home">Home</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="block py-2 px-4 hover:bg-gray-600" data-section="dashboard">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="block py-2 px-4 hover:bg-gray-600" data-section="manage-cargo">Manage Cargo</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="block py-2 px-4 hover:bg-gray-600" data-section="tracking">Cargo Tracking</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="block py-2 px-4 hover:bg-gray-600" data-section="reports">Reports</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="block py-2 px-4 hover:bg-gray-600" data-section="settings">Settings</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-8">
+            <!-- Home Section -->
+            <section id="home" class="section mb-6 hidden">
+                <h2 class="text-3xl font-bold mb-4">Welcome to Cargo Management System</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-lg transition-shadow hover:shadow-2xl">
+                        <h3 class="font-semibold text-xl mb-2">Efficient Cargo Management</h3>
+                        <p class="text-gray-600">Our Cargo Management System is designed to streamline the process of tracking, managing, and organizing your cargo shipments.</p>
+                        <img src="https://thumbs.dreamstime.com/b/commercial-cargo-delivery-truck-blank-white-trailer-driving-highway-generic-brandless-vehicle-design-d-rendering-77360415.jpg" 
+                             alt="Cargo Tracking" 
+                             class="w-full mt-4 rounded-md shadow-md transition-transform duration-300 hover:scale-105">
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-lg transition-shadow hover:shadow-2xl">
+                        <h3 class="font-semibold text-xl mb-2">Track Your Shipments in Real-Time</h3>
+                        <p class="text-gray-600">Stay informed about your cargo's status with real-time tracking features. Whether your shipment is in transit, pending, or delivered, you will know instantly.</p>
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJLjhcWmiqsIf5u8h9-GnY8j2PVvBH16BmHA&s" alt="cargo shipment" class="w-full mt-4 rounded-md shadow-md transition-transform duration-300 hover:scale-105">
+                    </div>
+                    
+                </div>
+
+                <h3 class="font-semibold text-xl mt-8 mb-4">Why Choose Us?</h3>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <ul class="space-y-3 text-gray-600">
+                        <li><strong>Real-Time Updates:</strong> Get live updates on the status of your cargo with our integrated tracking system.</li>
+                        <li><strong>Secure and Reliable:</strong> We ensure that your cargo is handled with care and delivered on time.</li>
+                        <li><strong>Easy-to-Use Interface:</strong> Our simple, user-friendly interface allows you to manage and track your shipments effortlessly.</li>
+                        <li><strong>Global Coverage:</strong> We offer cargo services that span across the globe, ensuring that no destination is out of reach.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section mb-6 hidden">
+                <h2 class="text-3xl font-bold mb-6 text-center">Dashboard</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div id="total-cargo" class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-semibold text-lg text-gray-700">Total Cargo</h3>
+                            <span class="bg-blue-500 text-white p-2 rounded-full">
+                                <i class="fas fa-box"></i> <!-- Icon -->
+                            </span>
+                        </div>
+                        <p class="text-4xl font-bold text-gray-800 mt-2" id="total-cargo-count">Loading...</p>
+                        <p class="text-sm text-gray-500 mt-2">Total number of cargo shipments in the system.</p>
+                        <div class="mt-4">
+                            <div class="w-full bg-gray-200 h-2 rounded">
+                                <div id="total-cargo-progress" class="bg-blue-500 h-2 rounded" style="width: 0;"></div>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1 text-right">0% of capacity filled</p>
+                        </div>
+                    </div>
+            
+                    <div id="in-transit" class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-semibold text-lg text-gray-700">In Transit</h3>
+                            <span class="bg-yellow-500 text-white p-2 rounded-full">
+                                <i class="fas fa-truck"></i> <!-- Icon -->
+                            </span>
+                        </div>
+                        <p class="text-4xl font-bold text-gray-800 mt-2" id="in-transit-count">Loading...</p>
+                        <p class="text-sm text-gray-500 mt-2">Cargo currently in transit.</p>
+                        <div class="mt-4">
+                            <div class="w-full bg-gray-200 h-2 rounded">
+                                <div id="in-transit-progress" class="bg-yellow-500 h-2 rounded" style="width: 0;"></div>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1 text-right">0% of total cargo in transit</p>
+                        </div>
+                    </div>
+            
+                    <div id="delivered" class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-semibold text-lg text-gray-700">Delivered</h3>
+                            <span class="bg-green-500 text-white p-2 rounded-full">
+                                <i class="fas fa-check-circle"></i> <!-- Icon -->
+                            </span>
+                        </div>
+                        <p class="text-4xl font-bold text-gray-800 mt-2" id="delivered-count">Loading...</p>
+                        <p class="text-sm text-gray-500 mt-2">Cargo delivered and completed.</p>
+                        <div class="mt-4">
+                            <div class="w-full bg-gray-200 h-2 rounded">
+                                <div id="delivered-progress" class="bg-green-500 h-2 rounded" style="width: 0;"></div>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1 text-right">0% of cargo delivered</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Add Font Awesome for Icons -->
+            <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+            
+            <script>
+                // Fetch the data from the backend
+                fetch("http://localhost:5000/api/dashboard")
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update the DOM with data
+                        document.getElementById('total-cargo-count').textContent = data.totalCargo;
+                        document.getElementById('in-transit-count').textContent = data.inTransit;
+                        document.getElementById('delivered-count').textContent = data.delivered;
+            
+                        // Update progress bars
+                        document.getElementById('total-cargo-progress').style.width = `${(data.totalCargo / 150) * 100}%`;
+                        document.getElementById('in-transit-progress').style.width = `${(data.inTransit / 150) * 100}%`;
+                        document.getElementById('delivered-progress').style.width = `${(data.delivered / 150) * 100}%`;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
+            </script>
+            
+
+            <!-- Manage Cargo Section -->
+            <section id="manage-cargo" class="section mb-6">
+                <h2 class="text-3xl font-bold mb-4">Manage Cargo</h2>
+                
+                <!-- Add Cargo Form -->
+                <form id="addCargoForm" class="space-y-4">
+                    <div>
+                        <label for="cargoName" class="block text-sm font-medium text-gray-700">Cargo Name</label>
+                        <input type="text" id="cargoName" name="cargoName" class="mt-1 p-2 border rounded w-full" placeholder="Enter cargo name" required />
+                    </div>
+                    
+                    <div>
+                        <label for="weight" class="block text-sm font-medium text-gray-700">Weight (kg)</label>
+                        <input type="number" id="weight" name="weight" class="mt-1 p-2 border rounded w-full" placeholder="Enter weight" required />
+                    </div>
+                    
+                    <div>
+                        <label for="destination" class="block text-sm font-medium text-gray-700">Destination</label>
+                        <input type="text" id="destination" name="destination" class="mt-1 p-2 border rounded w-full" placeholder="Enter destination" required />
+                    </div>
+                    
+                    <div>
+                        <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                        <select id="status" name="status" class="mt-1 p-2 border rounded w-full">
+                            <option value="in_transit">In Transit</option>
+                            <option value="delivered">Delivered</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <button type="submit" class="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">
+                            Add Cargo
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Success/Error Messages -->
+                <div id="message" class="mt-4"></div>
+                <script>
+                    document.getElementById('addCargoForm').addEventListener('submit', async function(e) {
+                        e.preventDefault(); // Prevent form from submitting normally
+                    
+                        const cargoName = document.getElementById('cargoName').value;
+                        const weight = document.getElementById('weight').value;
+                        const destination = document.getElementById('destination').value;
+                        const status = document.getElementById('status').value;
+                    
+                        // Prepare the cargo data
+                        const cargoData = {
+                            cargoName,
+                            weight,
+                            destination,
+                            status
+                        };
+                    
+                        try {
+                            // Make the API call to the backend to add the cargo
+                            const response = await fetch('/api/cargo', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(cargoData),
+                            });
+                    
+                            const data = await response.json();
+                    
+                            if (response.ok) {
+                                document.getElementById('message').innerHTML = '<p class="text-green-500">Cargo added successfully!</p>';
+                                document.getElementById('addCargoForm').reset(); // Reset form after successful submission
+                            } else {
+                                document.getElementById('message').innerHTML = `<p class="text-red-500">${data.message}</p>`;
+                            }
+                        } catch (error) {
+                            document.getElementById('message').innerHTML = '<p class="text-red-500">Error adding cargo. Please try again.</p>';
+                        }
+                    });
+                    </script>
+                    
+            </section>
+            
+
+            <!-- Cargo Tracking Section -->
+            <section id="tracking" class="section mb-6 hidden">
+                <h2 class="text-3xl font-bold mb-4">Cargo Tracking</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="font-semibold">Track Cargo</h3>
+                    <input type="text" id="tracking-id" class="w-full mt-2 p-2 border border-gray-300 rounded-md" placeholder="Enter Tracking ID">
+                    <button id="track-btn" class="mt-4 px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Track</button>
+                    <p id="tracking-result" class="mt-4 text-gray-500"></p>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports" class="section mb-6 hidden">
+                <h2 class="text-3xl font-bold mb-6 text-center">Cargo Shipment Report</h2>
+                
+                <!-- Report Summary: Cargo Status -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Cargo Status Bar Chart -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-semibold mb-4">Cargo Status</h3>
+                        <canvas id="cargoStatusChart"></canvas>
+                    </div>
+            
+                    <!-- Detailed Shipment Table -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-semibold mb-4">Detailed Shipments</h3>
+                        <table class="min-w-full table-auto">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-sm text-gray-700">Shipment ID</th>
+                                    <th class="px-4 py-2 text-left text-sm text-gray-700">Destination</th>
+                                    <th class="px-4 py-2 text-left text-sm text-gray-700">Status</th>
+                                    <th class="px-4 py-2 text-left text-sm text-gray-700">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border px-4 py-2">12345</td>
+                                    <td class="border px-4 py-2">New York</td>
+                                    <td class="border px-4 py-2 text-yellow-500">In Transit</td>
+                                    <td class="border px-4 py-2">2025-03-01</td>
+                                </tr>
+                                <tr>
+                                    <td class="border px-4 py-2">67890</td>
+                                    <td class="border px-4 py-2">Chicago</td>
+                                    <td class="border px-4 py-2 text-green-500">Delivered</td>
+                                    <td class="border px-4 py-2">2025-02-28</td>
+                                </tr>
+                                <!-- Add more rows dynamically as needed -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            
+                <!-- Cargo Over Time Line Chart -->
+                <div class="bg-white p-6 mt-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4">Cargo Over Time</h3>
+                    <canvas id="cargoOverTimeChart"></canvas>
+                </div>
+            </section>
+            
+
+            <!-- Settings Section -->
+            <section id="settings" class="section mb-6 hidden">
+                <h2 class="text-3xl font-bold mb-6 text-center">Account Settings</h2>
+            
+                <!-- Profile Settings -->
+                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Profile Settings</h3>
+                    <form action="#" method="POST">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="mb-4">
+                                <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                                <input type="text" id="name" name="name" class="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md shadow-sm" placeholder="John Doe" />
+                            </div>
+                            <div class="mb-4">
+                                <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                                <input type="email" id="email" name="email" class="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md shadow-sm" placeholder="johndoe@example.com" />
+                            </div>
+                            <div class="mb-4">
+                                <label for="profilePicture" class="block text-sm font-medium text-gray-700">Profile Picture</label>
+                                <input type="file" id="profilePicture" name="profilePicture" class="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md shadow-sm" />
+                            </div>
+                        </div>
+                        <button type="submit" class="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Save Profile</button>
+                    </form>
+                </div>
+            
+                <!-- Notification Settings -->
+                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Notification Settings</h3>
+                    <form action="#" method="POST">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">Email Notifications</label>
+                            <div class="mt-2 flex items-center">
+                                <input type="checkbox" id="emailNotifications" name="emailNotifications" class="mr-2" />
+                                <span>Enable email notifications for cargo updates.</span>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">SMS Notifications</label>
+                            <div class="mt-2 flex items-center">
+                                <input type="checkbox" id="smsNotifications" name="smsNotifications" class="mr-2" />
+                                <span>Enable SMS notifications for cargo updates.</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Save Notifications</button>
+                    </form>
+                </div>
+            
+                <!-- Theme Settings -->
+                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Theme Preferences</h3>
+                    <form action="#" method="POST">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">Select Theme</label>
+                            <div class="mt-2 flex items-center space-x-4">
+                                <button type="button" id="lightModeBtn" class="w-24 py-2 bg-gray-200 rounded-md hover:bg-gray-300">Light Mode</button>
+                                <button type="button" id="darkModeBtn" class="w-24 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900">Dark Mode</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            
+                <!-- Security Settings -->
+                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Security Settings</h3>
+                    <form action="#" method="POST">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">Change Password</label>
+                            <input type="password" id="newPassword" name="newPassword" class="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md shadow-sm" placeholder="New Password" />
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md shadow-sm" placeholder="Confirm Password" />
+                        </div>
+                        <button type="submit" class="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Save Security Settings</button>
+                    </form>
+                </div>
+            
+                <!-- Account Management -->
+                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Account Management</h3>
+                    <div class="flex items-center justify-between">
+                        <button type="button" class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700">Deactivate Account</button>
+                    </div>
+                </div>
+                <script>
+                    const updateProfile = async (formData) => {
+  const token = localStorage.getItem('authToken'); // Assuming you store the JWT in localStorage
+  
+  const response = await fetch('http://localhost:5000/settings/profile', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': `Bearer ${token}`
+    },
+    body: formData
+  });
+
+  if (response.ok) {
+    console.log('Profile updated successfully');
+  } else {
+    console.error('Error updating profile');
+  }
+};
+
+                </script>
+            </section>
+            
+    <script>
+  // Function to hide all sections
+function hideSections() {
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.add('hidden');
+    });
+}
+
+// Function to show a specific section
+function showSection(sectionId) {
+    hideSections(); // Hide all sections first
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.classList.remove('hidden'); // Show the selected section
+    }
+}
+
+// Event listener for sidebar links
+document.querySelectorAll('a[data-section]').forEach(link => {
+    link.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default anchor behavior
+        const sectionId = link.getAttribute('data-section');
+        showSection(sectionId);
+    });
+});
+
+// Show the default section (Home) when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    showSection('home');
+});
+
+        // Form and Tracking Button functionality
+        document.getElementById('cargo-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const cargoName = document.getElementById('cargo-name').value;
+            const cargoWeight = document.getElementById('cargo-weight').value;
+            const cargoDestination = document.getElementById('cargo-destination').value;
+            const cargoStatus = document.getElementById('cargo-status').value;
+
+            alert(`Cargo "${cargoName}" weighing ${cargoWeight}kg is going to "${cargoDestination}" with status "${cargoStatus}".`);
+            
+            // Clear the form fields
+            document.getElementById('cargo-name').value = '';
+            document.getElementById('cargo-weight').value = '';
+            document.getElementById('cargo-destination').value = '';
+            document.getElementById('cargo-status').value = 'in-transit';
+        });
+
+       
+    </script>
+
+</body>
+
+</html>
